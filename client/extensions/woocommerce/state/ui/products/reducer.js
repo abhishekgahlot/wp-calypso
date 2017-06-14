@@ -8,5 +8,4 @@ import variations from './variations/reducer';
 export default keyedReducer( 'siteId', combineReducers( {
 	edits,
 	variations,
-	apiPlan,
 } ) );
