@@ -8,7 +8,7 @@ import { translate } from 'i18n-calypso';
  */
 // TODO: Remove this when product edits have siteIds.
 import { getSelectedSiteId } from 'state/ui/selectors';
-import { getAllProductEdits, getProductWithLocalEdits } from 'woocommerce/state/ui/products/selectors';
+import { getAllProductEdits } from 'woocommerce/state/ui/products/selectors';
 import { createProduct } from 'woocommerce/state/sites/products/actions';
 import {
 	actionListCreate,
@@ -20,7 +20,8 @@ import {
 } from 'woocommerce/state/action-types';
 
 export function handleProductActionListCreate( { dispatch, getState }, action ) {
-	const actionList = makeProductActionList( getState() );
+	const { successAction, failureAction } = action;
+	const actionList = makeProductActionList( getState(), undefined, undefined, successAction, failureAction );
 
 	dispatch( actionListCreate( actionList ) );
 }
@@ -33,12 +34,16 @@ export function handleProductActionListCreate( { dispatch, getState }, action ) 
  * @param {Object} rootState The root calypso state.
  * @param {Number} [siteId=selected site] The siteId for the Action ListDO: Remove this when edits have siteIds.)
  * @param {Object} [productEdits=all edits] The product edits to be included in the Action List
+ * @param {Object} [successAction] Action to be dispatched upon successful action list completion.
+ * @param {Object} [failureAction] Action to be dispatched upon failure of action list execution.
  * @return {Object} An Action List object.
  */
 export function makeProductActionList(
 	rootState,
 	siteId = getSelectedSiteId( rootState ),
-	productEdits = getAllProductEdits( rootState )
+	productEdits = getAllProductEdits( rootState, siteId ),
+	successAction,
+	failureAction,
 ) {
 	const steps = [];
 
@@ -78,7 +83,7 @@ export function makeProductActionList(
 	...variation.deletes
 	*/
 
-	return steps;
+	return { steps, successAction, failureAction };
 }
 
 export default {
