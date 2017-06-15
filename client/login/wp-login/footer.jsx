@@ -4,7 +4,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { localize } from 'i18n-calypso';
-import page from 'page';
 
 /**
  * Internal dependencies
@@ -37,13 +36,10 @@ export class LoginFooter extends React.Component {
 		this.props.recordTracksEvent( 'calypso_login_lost_phone_link_click' );
 	};
 
-	recordMagicLoginLinkClick = event => {
-		event.preventDefault();
-
+	recordMagicLoginLinkClick = () => {
 		this.props.recordTracksEvent( 'calypso_login_magic_login_request_click' );
-		this.props.resetMagicLoginRequestForm();
 
-		page( login( { isNative: true, twoFactorAuthType: 'link' } ) );
+		this.props.resetMagicLoginRequestForm();
 	};
 
 	recordResetPasswordLinkClick = () => {
@@ -89,7 +85,11 @@ export class LoginFooter extends React.Component {
 		}
 
 		return (
-			<a href="#" key="magic-login-link" onClick={ this.recordMagicLoginLinkClick }>
+			<a
+				href={ login( { isNative: true, twoFactorAuthType: 'link' } ) }
+				key="magic-login-link"
+				onClick={ this.recordMagicLoginLinkClick }
+			>
 				{ this.props.translate( 'Email me a login link' ) }
 			</a>
 		);

@@ -4,7 +4,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { localize } from 'i18n-calypso';
-import page from 'page';
 
 /**
  * Internal dependencies
@@ -46,11 +45,8 @@ class MagicLogin extends React.Component {
 		translate: PropTypes.func.isRequired,
 	};
 
-	onClickEnterPasswordInstead = event => {
-		event.preventDefault();
+	recordEnterPasswordInsteadClick = () => {
 		this.props.recordTracksEvent( 'calypso_login_enter_password_instead_click' );
-
-		page( login( { isNative: true } ) );
 	};
 
 	magicLoginMainContent() {
@@ -101,9 +97,9 @@ class MagicLogin extends React.Component {
 					<div>
 						<RequestLoginEmailForm />
 						<div className="magic-login__footer">
-							<a href="#"
+							<a href={ login( { isNative: true } ) }
 								key="enter-password-link"
-								onClick={ this.onClickEnterPasswordInstead }>
+								onClick={ this.recordEnterPasswordInsteadClick }>
 								{ translate( 'Enter a password instead' ) }
 							</a>
 						</div>
